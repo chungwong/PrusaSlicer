@@ -62,6 +62,9 @@
 
 using namespace Slic3r;
 
+#include "backward.hpp"
+using namespace backward;
+
 static PrinterTechnology get_printer_technology(const DynamicConfig &config)
 {
     const ConfigOptionEnum<PrinterTechnology> *opt = config.option<ConfigOptionEnum<PrinterTechnology>>("printer_technology");
@@ -181,12 +184,6 @@ int CLI::run(int argc, char **argv)
     it = std::find(m_actions.begin(), m_actions.end(), "opengl-version");
     if (it != m_actions.end()) {
         std::string opengl_version_str = m_config.opt_string("opengl-version");
-        if (std::find(Slic3r::GUI::OpenGLVersions::core_str.begin(), Slic3r::GUI::OpenGLVersions::core_str.end(), opengl_version_str) == Slic3r::GUI::OpenGLVersions::core_str.end()) {
-            if (std::find(Slic3r::GUI::OpenGLVersions::precore_str.begin(), Slic3r::GUI::OpenGLVersions::precore_str.end(), opengl_version_str) == Slic3r::GUI::OpenGLVersions::precore_str.end()) {
-                boost::nowide::cerr << "Found invalid OpenGL version: " << opengl_version_str << std::endl;
-                opengl_version_str.clear();
-            }
-        }
 
         if (!opengl_version_str.empty()) {
             std::vector<std::string> tokens;

@@ -27,6 +27,14 @@ endif()
 
 add_subdirectory(libslic3r)
 
+include(FetchContent)
+FetchContent_Declare(backward
+        GIT_REPOSITORY https://github.com/bombela/backward-cpp
+        GIT_TAG v1.6)
+FetchContent_MakeAvailable(backward)
+
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS *.cpp libslic3r)
+
 if (SLIC3R_ENABLE_FORMAT_STEP)
     add_subdirectory(occt_wrapper)
 endif ()
@@ -134,8 +142,10 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/platform/osx/Info.plist.in ${CMAKE_CU
 if (WIN32)
     add_library(PrusaSlicer SHARED PrusaSlicer.cpp PrusaSlicer.hpp)
 else ()
-    add_executable(PrusaSlicer PrusaSlicer.cpp PrusaSlicer.hpp)
+    add_executable(PrusaSlicer PrusaSlicer.cpp PrusaSlicer.hpp ${BACKWARD_ENABLE})
 endif ()
+
+add_backward(PrusaSlicer)
 
 if (MINGW)
     target_link_options(PrusaSlicer PUBLIC "-Wl,-allow-multiple-definition")

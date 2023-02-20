@@ -16,6 +16,7 @@ namespace boost { namespace filesystem { class directory_entry; }}
 
 namespace Slic3r {
 
+void trace();
 extern void set_logging_level(unsigned int level);
 extern unsigned get_logging_level();
 // Format memory allocated, separate thousands by comma.

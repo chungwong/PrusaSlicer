@@ -408,7 +408,17 @@ set(SLIC3R_SOURCES
     Arachne/WallToolPaths.cpp
 )
 
-add_library(libslic3r STATIC ${SLIC3R_SOURCES})
+include(FetchContent)
+
+# Also requires one of: libbfd (gnu binutils), libdwarf, libdw (elfutils)
+FetchContent_Declare(backward
+        GIT_REPOSITORY https://github.com/bombela/backward-cpp
+        GIT_TAG v1.6)
+FetchContent_MakeAvailable(backward)
+
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS *.cpp)
+
+add_library(libslic3r STATIC ${SLIC3R_SOURCES} ${BACKWARD_ENABLE})
 
 foreach(_source IN ITEMS ${SLIC3R_SOURCES})
     get_filename_component(_source_path "${_source}" PATH)
@@ -511,3 +521,4 @@ endif ()
 if (SLIC3R_PCH AND NOT SLIC3R_SYNTAXONLY)
     add_precompiled_header(libslic3r pchheader.hpp FORCEINCLUDE)
 endif ()
+add_backward(libslic3r)

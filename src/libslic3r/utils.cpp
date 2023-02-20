@@ -44,6 +44,7 @@
 #include <boost/nowide/fstream.hpp>
 #include <boost/nowide/convert.hpp>
 #include <boost/nowide/cstdio.hpp>
+#include "backward.hpp"
 
 // We are using quite an old TBB 2017 U7, which does not support global control API officially.
 // Before we update our build servers, let's use the old API, which is deprecated in up to date TBB.
@@ -72,6 +73,16 @@
 #endif
 
 namespace Slic3r {
+
+using namespace backward;
+
+void trace() {
+  Printer printer;
+  StackTrace st;
+  st.load_here();
+  printer.print(st, std::cout);
+}
+
 
 static boost::log::trivial::severity_level logSeverity = boost::log::trivial::error;
 
